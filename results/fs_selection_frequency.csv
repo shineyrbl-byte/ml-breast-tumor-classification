@@ -1,0 +1,20 @@
+,SelectKBest (MI),RFE (LR),L1 path,total
+radius_worst,5,5,5,15
+concave_points_mean,5,4,5,14
+concave_points_worst,5,4,4,13
+area_worst,5,5,3,13
+perimeter_worst,5,5,2,12
+texture_worst,0,5,5,10
+radius_se,0,5,5,10
+area_se,5,5,0,10
+concavity_mean,5,3,0,8
+radius_mean,5,1,0,6
+concavity_worst,0,2,4,6
+smoothness_worst,0,1,5,6
+symmetry_worst,0,1,5,6
+fractal_dimension_se,0,1,5,6
+area_mean,5,0,0,5
+perimeter_mean,5,0,0,5
+texture_mean,0,0,2,2
+compactness_se,0,2,0,2
+texture_se,0,1,0,1
