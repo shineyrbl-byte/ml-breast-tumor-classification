@@ -1,7 +1,7 @@
 # Breast Tumor Classification Using Classical Machine Learning: PCA and Feature Selection
 
 **Group:** Rohan Agrawal (2024ADPS0004G), Srinivasa Harshith Pataneni (2024A7PS0597G),
-Malay Keema (2024A1PS0286G), Nandika Tamse (2024A1PS1463G), Priyanshi Modi (2023B3A70791G),
+Malay Neema (2024A1PS0286G), Nandika Tamse (2024A1PS1463G), Priyanshi Modi (2023B3A70791G),
 Avisha Srivastava (2024A1PS0273G)
 
 All numbers below come from the executed notebooks in `notebooks/`. The CSV files in
