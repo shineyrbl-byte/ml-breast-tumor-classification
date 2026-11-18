@@ -1,0 +1,42 @@
+{
+  "dtree": {
+    "clf__ccp_alpha": 0.0,
+    "clf__class_weight": "balanced",
+    "clf__criterion": "gini",
+    "clf__max_depth": 5,
+    "clf__min_samples_leaf": 5
+  },
+  "dummy": {},
+  "gnb": {
+    "clf__var_smoothing": 0.03162277660168379
+  },
+  "knn": {
+    "clf__n_neighbors": 3,
+    "clf__p": 1,
+    "clf__weights": "uniform"
+  },
+  "lda": {},
+  "logreg": {
+    "clf__C": 0.1,
+    "clf__class_weight": "balanced",
+    "clf__l1_ratio": 0
+  },
+  "logreg_l1": {
+    "clf__C": 0.31622776601683794,
+    "clf__class_weight": "balanced",
+    "clf__l1_ratio": 1
+  },
+  "rf": {
+    "clf__class_weight": null,
+    "clf__max_depth": null,
+    "clf__max_features": 0.5,
+    "clf__min_samples_leaf": 2,
+    "clf__n_estimators": 200
+  },
+  "svm": {
+    "clf__C": 3.1622776601683795,
+    "clf__class_weight": "balanced",
+    "clf__gamma": 0.01,
+    "clf__kernel": "rbf"
+  }
+}
