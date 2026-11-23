@@ -231,7 +231,62 @@ plane. They are borderline, medium-sized tumours, not labelling mistakes or outl
    auditable list of weights, against at most about 0.01 F1 for the black-box SVM + PCA. The
    decision threshold should be set for high sensitivity.
 
-## 9. Limitations
+## 9. From-scratch implementations and computational experiments (nb 08)
+
+Every member also implemented the algorithm from their own part in NumPy (`src/scratch.py`,
+about 600 lines). The classes follow the scikit-learn API, so they run through the same
+pipelines, folds and metrics as everything else.
+
+| Member | Implemented | Key computational idea |
+|---|---|---|
+| 1 | standardisation, stratified K-fold | per-class shuffling, round-robin fold assignment |
+| 2 | logistic regression, Gaussian NB | accelerated (Nesterov) gradient descent with step 1/L; log-sum-exp |
+| 3 | KNN, kernel SVM | distance matrix as one matrix product + `argpartition`; **SMO dual solver** with LIBSVM's second-order working-set selection |
+| 4 | CART tree, Random Forest | sort-once/cumulative-sum split search, O(d·n log n) per node; bagging with out-of-bag score |
+| 5 | PCA | covariance eigendecomposition; hand-written power iteration with deflation |
+| 6 | RFE | recursive elimination driven by our own logistic regression |
+
+**Correctness against scikit-learn** (tuned hyper-parameters, same 5 folds):
+
+| Model | CV F1, scratch | CV F1, sklearn | Test predictions identical |
+|---|---|---|---|
+| Logistic Regression | 0.9671 | 0.9671 | 100 % |
+| Gaussian NB | 0.9214 | 0.9214 | 100 % |
+| KNN | 0.9667 | 0.9667 | 100 % |
+| SVM (RBF) | 0.9760 | 0.9760 | 100 % (same 73 support vectors) |
+| Decision Tree | 0.9274 | 0.9378 | 99.1 % |
+| Random Forest | 0.9519 | 0.9587 | 100 % |
+
+The deterministic models match to numerical precision: LR coefficients within 2e-6, GNB and
+KNN probabilities within 1e-14, and PCA components within 6e-15 (eigh) or 5e-6 (power
+iteration). Scratch RFE keeps exactly the same 5 features as scikit-learn. The trees differ
+only by tie-breaking between equally good splits, and the gap is well inside the CV standard
+deviation (about 0.03).
+
+**Convergence and complexity.** Gradient descent converges in 1,545 iterations. SMO reaches
+a KKT gap of 1e-3 in 176 iterations. Power iteration needs 18–123 iterations per component,
+and slower when the eigengap ratio λ(k+1)/λ(k) is close to 1. The scratch Random Forest's OOB
+accuracy is 0.960 (scikit-learn 0.956). Runtime is within 2–4× of scikit-learn, except
+logistic regression (about 20×, because first-order gradient descent needs many more
+iterations than scikit-learn's curvature-aware solver).
+
+**Nested cross-validation** (5 outer × 5 inner folds; about 4,000 fits for the SVM grid):
+
+| Model | Best grid CV F1 (used so far) | Nested CV F1 | Optimism |
+|---|---|---|---|
+| Logistic Regression | 0.967 | 0.955 ± 0.017 | 0.013 |
+| KNN | 0.967 | 0.945 ± 0.032 | 0.021 |
+| SVM (RBF) | 0.976 | 0.955 ± 0.019 | 0.021 |
+| Random Forest | 0.959 | 0.937 ± 0.040 | 0.022 |
+
+Picking the best of many grid candidates overstates performance by about 0.01–0.02 F1. The
+ranking does not change: SVM ≈ LR > KNN > RF.
+
+**Permutation test** (from-scratch LR pipeline, 1,000 label shuffles × 5 folds = 5,000 fits):
+real CV F1 0.967 vs 0.416 ± 0.036 with shuffled labels (maximum 0.517), so p = 0.001, the
+minimum possible with 1,000 permutations.
+
+## 10. Limitations
 
 * The dataset is small (569 samples, 114 for testing) and comes from a single source, so
   differences of one or two test errors are not meaningful. Results may not transfer to
@@ -242,9 +297,9 @@ plane. They are borderline, medium-sized tumours, not labelling mistakes or outl
 * The high-sensitivity threshold was fixed at recall ≥ 0.99. A real deployment would set it
   from clinical costs.
 
-## 10. Reproducing
+## 11. Reproducing
 
 ```bash
 pip install -r requirements.txt
-python src/build_notebooks.py        # rebuilds and executes notebooks 01–07 (~10 min)
+python src/build_notebooks.py        # rebuilds and executes notebooks 01–08 (~20 min)
 ```
