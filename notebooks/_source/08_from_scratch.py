@@ -1,19 +1,19 @@
 # %% [markdown]
-# # 08: Implementing the algorithms from scratch
-# **All members.** Notebooks 01–07 use scikit-learn. Here every member re-implements the
-# algorithm from their own part using only NumPy (`src/scratch.py`) and checks it against
-# scikit-learn on the same data, split, folds and hyper-parameters. Then we run three
+# # 08: Significant computation part: implementing the algorithms from scratch
+# Notebooks 01–07 use scikit-learn. Here every algorithm in the project is re-implemented
+# using only NumPy (`src/scratch.py`) and checked against scikit-learn on the same data,
+# split, folds and hyper-parameters. Then we run three
 # heavier computational experiments: a runtime benchmark, nested cross-validation and a
 # permutation test.
 #
-# | Member | Implemented from scratch |
+# | Area | Implemented from scratch |
 # |---|---|
-# | 1 | standardisation, stratified K-fold splitter, nested CV, permutation test |
-# | 2 | logistic regression (accelerated gradient descent), Gaussian Naive Bayes |
-# | 3 | KNN (vectorised distances), kernel SVM (SMO dual solver) |
-# | 4 | CART decision tree, Random Forest with out-of-bag score |
-# | 5 | PCA (covariance eigendecomposition and power iteration) |
-# | 6 | recursive feature elimination (RFE) |
+# | Protocol | standardisation, stratified K-fold splitter, nested CV, permutation test |
+# | Linear / probabilistic | logistic regression (accelerated gradient descent), Gaussian Naive Bayes |
+# | Distance / kernel | KNN (vectorised distances), kernel SVM (SMO dual solver) |
+# | Trees | CART decision tree, Random Forest with out-of-bag score |
+# | Dimensionality reduction | PCA (covariance eigendecomposition and power iteration) |
+# | Feature selection | recursive feature elimination (RFE) |
 #
 # The scratch classes follow the scikit-learn API, so they run through our common
 # protocol (`cv_evaluate`, Pipelines) unchanged. The comparison is like for like.
@@ -49,7 +49,7 @@ A, B = sc.transform(Xtr), sc.transform(Xte)   # scaled train / test for direct c
 BP
 
 # %% [markdown]
-# ## 1. Member 1: standardisation and the stratified K-fold splitter
+# ## 1. Standardisation and the stratified K-fold splitter
 # The scaler learns the mean and standard deviation on the training data only. The splitter
 # shuffles each class separately and deals its samples to the folds in turn, so every fold
 # keeps the 37/63 malignant/benign ratio.
@@ -79,7 +79,7 @@ print(f"scratch LR, CV F1 with sklearn splitter: {f1_skl.mean():.4f} ± {f1_skl.
 # single 5-fold estimate is (we quantify this in Section 9).
 
 # %% [markdown]
-# ## 2. Member 2: logistic regression and Gaussian Naive Bayes
+# ## 2. Logistic regression and Gaussian Naive Bayes
 # **Logistic regression.** We minimise the regularised log-loss with gradient descent:
 #
 # $$J(\beta) = \frac{1}{n}\sum_i w_i\left[\log(1+e^{z_i}) - y_i z_i\right] + \frac{1}{2Cn}\lVert\beta\rVert^2,
@@ -119,7 +119,7 @@ gnb_skl = GaussianNB(**BP["gnb"]).fit(A, ytr)
 print(f"max probability difference: {np.abs(gnb_scr.predict_proba(B) - gnb_skl.predict_proba(B)).max():.1e}")
 
 # %% [markdown]
-# ## 3. Member 3: KNN and kernel SVM
+# ## 3. KNN and kernel SVM
 # **KNN.** The Euclidean distance matrix is one matrix product,
 # $\lVert a-b\rVert^2 = \lVert a\rVert^2 + \lVert b\rVert^2 - 2a^\top b$. The $k$ nearest
 # neighbours are found with `argpartition`, which takes $O(n)$ time rather than a full sort.
@@ -158,7 +158,7 @@ print(f"support vectors: scratch {len(svm_scr.support_)}, sklearn {len(svm_skl.s
 print(f"test-set predictions identical: {np.mean(svm_scr.predict(B) == svm_skl.predict(B)):.0%}")
 
 # %% [markdown]
-# ## 4. Member 4: CART decision tree and Random Forest
+# ## 4. CART decision tree and Random Forest
 # **CART.** At every node, for every feature, we sort the samples once and score all
 # thresholds in one pass using cumulative class counts. That costs $O(d\,n\log n)$ per node
 # instead of $O(d\,n^2)$. The split with the largest weighted Gini decrease wins.
@@ -212,7 +212,7 @@ imp[::-1].plot.barh(ax=ax[1]); ax[1].set_title("Top-10 Gini importances")
 savefig(fig, "08_rf_scratch"); plt.show()
 
 # %% [markdown]
-# ## 5. Member 5: PCA from the covariance matrix
+# ## 5. PCA from the covariance matrix
 # PCA = eigendecomposition of the sample covariance $\Sigma = \frac{1}{n-1}X_c^\top X_c$.
 # The eigenvectors are the principal axes and the eigenvalues are the variance along each.
 # We implement two solvers: NumPy's exact symmetric eigensolver (`eigh`), and **power
@@ -248,7 +248,7 @@ ax.set_title("Reconstruction error = 1 − cumulative variance (standardised dat
 savefig(fig, "08_pca_reconstruction"); plt.show()
 
 # %% [markdown]
-# ## 6. Member 6: recursive feature elimination
+# ## 6. Recursive feature elimination
 # Fit logistic regression, drop the feature with the smallest |coefficient|, refit, and
 # repeat until $k$ features remain. Our RFE uses our own logistic regression inside.
 
@@ -452,7 +452,7 @@ savefig(fig, "08_permutation_test"); plt.show()
 # the CV procedure.
 #
 # ## Summary
-# * All six members' algorithms were implemented in NumPy and plug into the same pipeline.
+# * Every algorithm in the project was implemented in NumPy and plugs into the same pipeline.
 # * The deterministic models reproduce scikit-learn exactly: coefficients and probabilities
 #   to $10^{-6}$ or better, SVM decision values to the SMO stopping tolerance, and the same CV
 #   F1 and test predictions. The trees and forests agree within CV noise.

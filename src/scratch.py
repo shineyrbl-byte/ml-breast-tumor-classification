@@ -10,12 +10,12 @@ split and folds.
 Only NumPy is used inside the algorithms. scikit-learn supplies the base
 classes, which give us get_params/set_params and cloning.
 
-  Member 1  StandardScalerScratch, stratified K-fold splitter
-  Member 2  LogisticRegressionScratch (gradient descent), GaussianNBScratch
-  Member 3  KNNScratch, SVMScratch (SMO dual solver, linear + RBF kernels)
-  Member 4  DecisionTreeScratch (CART), RandomForestScratch (bagging)
-  Member 5  PCAScratch (covariance eigendecomposition + power iteration)
-  Member 6  RFEScratch (recursive feature elimination)
+  Protocol         StandardScalerScratch, stratified K-fold splitter
+  Linear / prob.   LogisticRegressionScratch (gradient descent), GaussianNBScratch
+  Distance/kernel  KNNScratch, SVMScratch (SMO dual solver, linear + RBF kernels)
+  Trees            DecisionTreeScratch (CART), RandomForestScratch (bagging)
+  Reduction        PCAScratch (covariance eigendecomposition + power iteration)
+  Selection        RFEScratch (recursive feature elimination)
 """
 from __future__ import annotations
 
@@ -40,7 +40,7 @@ def _class_weights(y, class_weight):
 
 
 # ==========================================================================
-# Member 1: preprocessing and the CV splitter
+# preprocessing and the CV splitter
 # ==========================================================================
 class StandardScalerScratch(BaseEstimator, TransformerMixin):
     """z = (x - mean) / std, with mean and std learned on training data only."""
@@ -72,7 +72,7 @@ def stratified_kfold_scratch(y, n_splits=5, seed=42):
 
 
 # ==========================================================================
-# Member 2: Logistic Regression and Gaussian Naive Bayes
+# Logistic Regression and Gaussian Naive Bayes
 # ==========================================================================
 class LogisticRegressionScratch(BaseEstimator, ClassifierMixin):
     """L2-regularised logistic regression trained by full-batch gradient descent.
@@ -183,7 +183,7 @@ class GaussianNBScratch(BaseEstimator, ClassifierMixin):
 
 
 # ==========================================================================
-# Member 3: KNN and SVM
+# KNN and SVM
 # ==========================================================================
 class KNNScratch(BaseEstimator, ClassifierMixin):
     """k-nearest neighbours with a vectorised Minkowski distance matrix."""
@@ -321,7 +321,7 @@ class SVMScratch(BaseEstimator, ClassifierMixin):
 
 
 # ==========================================================================
-# Member 4: CART Decision Tree and Random Forest
+# CART Decision Tree and Random Forest
 # ==========================================================================
 class DecisionTreeScratch(BaseEstimator, ClassifierMixin):
     """CART classification tree with Gini or entropy impurity.
@@ -511,7 +511,7 @@ class RandomForestScratch(BaseEstimator, ClassifierMixin):
 
 
 # ==========================================================================
-# Member 5: PCA
+# PCA
 # ==========================================================================
 def power_iteration(A, n_components, n_iter=1000, tol=1e-12, seed=0):
     """Top eigenpairs of a symmetric PSD matrix by power iteration + deflation."""
@@ -580,7 +580,7 @@ class PCAScratch(BaseEstimator, TransformerMixin):
 
 
 # ==========================================================================
-# Member 6: Recursive Feature Elimination
+# Recursive Feature Elimination
 # ==========================================================================
 class RFEScratch(BaseEstimator, TransformerMixin):
     """Fit, drop the feature with the smallest |coefficient|, repeat until k remain.

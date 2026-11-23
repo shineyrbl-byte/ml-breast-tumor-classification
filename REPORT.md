@@ -231,20 +231,30 @@ plane. They are borderline, medium-sized tumours, not labelling mistakes or outl
    auditable list of weights, against at most about 0.01 F1 for the black-box SVM + PCA. The
    decision threshold should be set for high sensitivity.
 
-## 9. From-scratch implementations and computational experiments (nb 08)
+## 9. Significant computation part: from-scratch implementations and heavy experiments (nb 08)
 
-Every member also implemented the algorithm from their own part in NumPy (`src/scratch.py`,
-about 600 lines). The classes follow the scikit-learn API, so they run through the same
-pipelines, folds and metrics as everything else.
+The project's significant computation part is one separate notebook, presented as a whole.
+Every algorithm used in the project was implemented from scratch in NumPy (`src/scratch.py`,
+about 600 lines), checked against scikit-learn, and then used in about 9,000 extra model fits
+(nested cross-validation and a permutation test). The notebook takes about 10 minutes to run,
+while most of the others take seconds.
 
-| Member | Implemented | Key computational idea |
-|---|---|---|
-| 1 | standardisation, stratified K-fold | per-class shuffling, round-robin fold assignment |
-| 2 | logistic regression, Gaussian NB | accelerated (Nesterov) gradient descent with step 1/L; log-sum-exp |
-| 3 | KNN, kernel SVM | distance matrix as one matrix product + `argpartition`; **SMO dual solver** with LIBSVM's second-order working-set selection |
-| 4 | CART tree, Random Forest | sort-once/cumulative-sum split search, O(d·n log n) per node; bagging with out-of-bag score |
-| 5 | PCA | covariance eigendecomposition; hand-written power iteration with deflation |
-| 6 | RFE | recursive elimination driven by our own logistic regression |
+**Why it was done.** Notebooks 01–07 rely on scikit-learn, which hides the mathematics.
+Implementing each algorithm by hand shows exactly how it works, and matching scikit-learn's
+output verifies both the mathematics and the code. The heavy experiments check that the
+reported scores are honest (not inflated by tuning) and reflect a real signal (not chance).
+
+The classes follow the scikit-learn API, so they run through the same pipelines, folds and
+metrics as everything else.
+
+| Implemented | Key computational idea |
+|---|---|
+| standardisation, stratified K-fold | per-class shuffling, round-robin fold assignment |
+| logistic regression, Gaussian NB | accelerated (Nesterov) gradient descent with step 1/L; log-sum-exp |
+| KNN, kernel SVM | distance matrix as one matrix product + `argpartition`; **SMO dual solver** with LIBSVM's second-order working-set selection |
+| CART tree, Random Forest | sort-once/cumulative-sum split search, O(d·n log n) per node; bagging with out-of-bag score |
+| PCA | covariance eigendecomposition; hand-written power iteration with deflation |
+| RFE | recursive elimination driven by the hand-written logistic regression |
 
 **Correctness against scikit-learn** (tuned hyper-parameters, same 5 folds):
 
