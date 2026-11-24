@@ -1,6 +1,6 @@
 # %% [markdown]
 # # 08: Significant computation part: implementing the algorithms from scratch
-# Notebooks 01–07 use scikit-learn. Here every algorithm in the project is re-implemented
+# **Member 5.** Notebooks 01–07 use scikit-learn. Here every algorithm in the project is re-implemented
 # using only NumPy (`src/scratch.py`) and checked against scikit-learn on the same data,
 # split, folds and hyper-parameters. Then we run three
 # heavier computational experiments: a runtime benchmark, nested cross-validation and a
@@ -400,7 +400,7 @@ pd.Series(slopes, name="empirical exponent (time ∝ n^a)").round(2)
 # upwards. **Nested CV** removes the bias. An inner 5-fold grid search tunes the model
 # using only the outer-training part of each of 5 outer folds, and the tuned model is then
 # scored on the outer-test fold it never saw. For the RBF SVM that is
-# 5 outer × 162 candidates × 5 inner = **4,050 model fits**, plus refits.
+# 5 outer × 184 candidates × 5 inner = **4,600 model fits**, plus refits (over 10,000 across the four models).
 
 # %%
 from models import build_pipeline, GRIDS
@@ -458,6 +458,6 @@ savefig(fig, "08_permutation_test"); plt.show()
 #   F1 and test predictions. The trees and forests agree within CV noise.
 # * Convergence analyses: GD loss curve, SMO KKT gap, power-iteration speed vs eigengap,
 #   and OOB accuracy vs number of trees.
-# * Heavier experiments: a runtime/complexity benchmark, nested CV (about 4k fits per
-#   model) showing that tuning optimism is about 0.01–0.02 F1, and a permutation test
+# * Heavier experiments: a runtime/complexity benchmark, nested CV (over 10k fits across
+#   the four models) showing that tuning optimism is about 0.01–0.02 F1, and a permutation test
 #   (5k fits) with p ≈ 0.001.

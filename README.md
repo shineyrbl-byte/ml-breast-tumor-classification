@@ -43,7 +43,7 @@ notebooks/
   05_pca.ipynb                 Member 5: PCA (2/5/10/95 %) + component curve
   06_feature_selection.ipynb   Member 6: SelectKBest-MI, RFE, L1 path; stability; L1 comparison
   07_final_evaluation.ipynb    Member 1: test-set evaluation, comparisons, error analysis, conclusions
-  08_from_scratch.ipynb        Significant computation part: own implementations vs sklearn, runtime, nested CV, permutation test
+  08_from_scratch.ipynb        Member 5: significant computation part: own implementations vs sklearn, runtime, nested CV, permutation test
   _source/                     editable source of each notebook (# %% cell format)
 results/                       CSV/JSON outputs (CV tables, tuned params, test results)
 figures/                       all plots (PNG)
