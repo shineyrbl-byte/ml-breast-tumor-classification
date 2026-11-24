@@ -1,6 +1,6 @@
 # %% [markdown]
 # # 08: Significant computation part: implementing the algorithms from scratch
-# Notebooks 01–07 use scikit-learn. Here every algorithm in the project is re-implemented
+# **Member 5.** Notebooks 01–07 use scikit-learn. Here every algorithm in the project is re-implemented
 # using only NumPy (`src/scratch.py`) and checked against scikit-learn on the same data,
 # split, folds and hyper-parameters. Then we run three
 # heavier computational experiments: a runtime benchmark, nested cross-validation and a

@@ -233,7 +233,8 @@ plane. They are borderline, medium-sized tumours, not labelling mistakes or outl
 
 ## 9. Significant computation part: from-scratch implementations and heavy experiments (nb 08)
 
-The project's significant computation part is one separate notebook, presented as a whole.
+The project's significant computation part is one separate notebook, presented as a whole by
+Member 5.
 Every algorithm used in the project was implemented from scratch in NumPy (`src/scratch.py`,
 about 600 lines), checked against scikit-learn, and then used in about 9,000 extra model fits
 (nested cross-validation and a permutation test). The notebook takes about 10 minutes to run,
