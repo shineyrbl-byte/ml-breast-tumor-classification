@@ -236,7 +236,7 @@ plane. They are borderline, medium-sized tumours, not labelling mistakes or outl
 The project's significant computation part is one separate notebook, presented as a whole by
 Member 5.
 Every algorithm used in the project was implemented from scratch in NumPy (`src/scratch.py`,
-about 600 lines), checked against scikit-learn, and then used in about 9,000 extra model fits
+about 600 lines), checked against scikit-learn, and then used in over 15,000 extra model fits
 (nested cross-validation and a permutation test). The notebook takes about 10 minutes to run,
 while most of the others take seconds.
 
@@ -281,7 +281,7 @@ accuracy is 0.960 (scikit-learn 0.956). Runtime is within 2–4× of scikit-lear
 logistic regression (about 20×, because first-order gradient descent needs many more
 iterations than scikit-learn's curvature-aware solver).
 
-**Nested cross-validation** (5 outer × 5 inner folds; about 4,000 fits for the SVM grid):
+**Nested cross-validation** (5 outer × 5 inner folds; about 4,600 fits for the SVM grid, over 10,000 for the four models):
 
 | Model | Best grid CV F1 (used so far) | Nested CV F1 | Optimism |
 |---|---|---|---|
