@@ -61,3 +61,6 @@ You can also open the `.ipynb` files in Jupyter and run them in order (01 → 08
 05–08 read `results/best_params.json`, which notebooks 02–04 write. The held-out test set
 is used for evaluation only in notebook 07. Notebook 08 only checks that the scratch and
 scikit-learn predictions on it agree.
+
+Built for BITS F464 Machine Learning course
+- By Avisha Srivastava
